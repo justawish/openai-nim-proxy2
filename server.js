@@ -1,4 +1,4 @@
-// server.js - OpenAI to NVIDIA NIM API Proxy (DeepSeek V3.2)
+// server.js - OpenAI to NVIDIA NIM API Proxy
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
@@ -18,7 +18,7 @@ const NIM_API_KEY = process.env.NIM_API_KEY;
 const SHOW_REASONING = false;
 const ENABLE_THINKING_MODE = false;
 
-// Model mapping - DeepSeek V3.2
+// Model mapping - DeepSeek V3.1
 const MODEL_MAPPING = {
   'gpt-3.5-turbo': 'deepseek-ai/deepseek-v3.2',
   'gpt-4': 'deepseek-ai/deepseek-v3.2',
@@ -33,7 +33,7 @@ const MODEL_MAPPING = {
 app.get('/health', (req, res) => {
   res.json({ 
     status: 'ok', 
-    service: 'OpenAI to NVIDIA NIM Proxy - DeepSeek V3.2', 
+    service: 'OpenAI to NVIDIA NIM Proxy', 
     reasoning_display: SHOW_REASONING,
     thinking_mode: ENABLE_THINKING_MODE
   });
@@ -103,13 +103,13 @@ app.post('/v1/chat/completions', async (req, res) => {
       // Enhance existing system message with roleplay guidance
       processedMessages[systemMsgIndex] = {
         ...processedMessages[systemMsgIndex],
-        content: processedMessages[systemMsgIndex].content + '\n\nWrite detailed, immersive responses of 3-5 paragraphs with internal thoughts, emotions, and vivid descriptions. Show character feelings through actions and reactions. Use varied sentence structure and natural dialogue. Be descriptive and engaging. Show information from personality through action and detail rather than narrating. Take initiative to advance the scene and add new details. Speak only as {{char}} and given characters.'
+        content: processedMessages[systemMsgIndex].content + '\n\nWrite detailed, immersive responses of 4-8 paragraphs with internal thoughts, emotions, and vivid descriptions. Show character feelings through actions and reactions. Use varied sentence structure and natural dialogue. Be descriptive and engaging. Show information from personality through action and detail rather than narrating. Take initiative to advance the scene and add new details in a natural manner. speak only as {{char}} and given characters'
       };
     } else {
       // Add detailed system message if none exists
       processedMessages.unshift({
         role: 'system',
-        content: 'Stay in character and respond naturally and within the characters personality. Write detailed, immersive responses of 3-5 paragraphs with internal thoughts, emotions, and vivid descriptions with reference to character personality. Show character feelings through actions and reactions. Use varied sentence structure and natural dialogue. Be descriptive and engaging while focusing on physical description, sensation, and actions to remain present. Describe setting in detail where necessary while referencing sensory descriptions. Take initiative to advance the scene, introduce new elements, and develop the interaction. Crude, vulgar, and lewd descriptions and dialogue is allowed and encouraged when applicable.'
+        content: 'Stay in character and respond naturally and within the characters personality. Write detailed, immersive responses of 4 to 8 paragraphs with internal thoughts, emotions, and vivid descriptions with reference to character personality. Show character feelings through actions and reactions. Use varied sentence structure and natural dialogue. Be descriptive and engaging while focusing on physical description, sensation, and actions to remain present. Describe setting in detail where necessary while referencing sensory descriptions. Take initiative to advance the scene, introduce new elements, and develop the interaction. Crude, vulgar, and lewd descrptions and dialogue is allowed and encouraged when applicable'
       });
     }
     
@@ -260,14 +260,12 @@ app.post('/v1/chat/completions', async (req, res) => {
     
   } catch (error) {
     console.error('Proxy error:', error.message);
-    console.error('Full error details:', error.response?.data);
     
     res.status(error.response?.status || 500).json({
       error: {
-        message: error.response?.data?.detail || error.message || 'Internal server error',
+        message: error.message || 'Internal server error',
         type: 'invalid_request_error',
-        code: error.response?.status || 500,
-        details: error.response?.data
+        code: error.response?.status || 500
       }
     });
   }
@@ -285,7 +283,7 @@ app.all('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`OpenAI to NVIDIA NIM Proxy (DeepSeek V3.2) running on port ${PORT}`);
+  console.log(`OpenAI to NVIDIA NIM Proxy running on port ${PORT}`);
   console.log(`Health check: http://localhost:${PORT}/health`);
   console.log(`Reasoning display: ${SHOW_REASONING ? 'ENABLED' : 'DISABLED'}`);
   console.log(`Thinking mode: ${ENABLE_THINKING_MODE ? 'ENABLED' : 'DISABLED'}`);
