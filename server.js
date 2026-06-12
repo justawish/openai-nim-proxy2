@@ -20,13 +20,13 @@ const ENABLE_THINKING_MODE = false;
 
 // Model mapping - DeepSeek V3.1
 const MODEL_MAPPING = {
-  'gpt-3.5-turbo': 'z-ai/glm4.7',
-  'gpt-4': 'z-ai/glm4.7',
-  'gpt-4-turbo': 'z-ai/glm4.7',
-  'gpt-4o': 'z-ai/glm4.7',
-  'claude-3-opus': 'z-ai/glm4.7',
-  'claude-3-sonnet': 'z-ai/glm4.7',
-  'gemini-pro': 'z-ai/glm4.7' 
+  'gpt-3.5-turbo': 'z-ai/glm-5.1',
+  'gpt-4': 'z-ai/glm-5.1',
+  'gpt-4-turbo': 'z-ai/glm-5.1',
+  'gpt-4o': 'z-ai/glm-5.1',
+  'claude-3-opus': 'z-ai/glm-5.1',
+  'claude-3-sonnet': 'z-ai/glm-5.1',
+  'gemini-pro': 'z-ai/glm-5.1' 
 };
 
 // Health check endpoint
